@@ -8,12 +8,28 @@
 #include <map>
 #include <vector>
 #include <algorithm>
+#include <deque>
+#include <set>
+
+using ElementID=unsigned int;
+
+static std::set<ElementID> assigned_IDs;
+static std::set<ElementID> freed_IDs;
 
 class Package {};
 
 enum PackageQueueType {
     FIFO,
     LIFO
+};
+
+//in progress
+class PackageQueue{
+public:
+    PackageQueue(PackageQueueType queue_type);
+private:
+    std::deque<Package> queue_;
+    PackageQueueType queue_type_;
 };
 
 class IPackageStockpile {
