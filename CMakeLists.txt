@@ -14,3 +14,20 @@ set(SOURCE_FILES
 
 
 add_executable(NetSim main.cpp ${SOURCE_FILES})
+
+# == Unit testing using Google Testing Framework ==
+
+set(SOURCES_FILES_TESTS
+        tests/package_tests.cpp
+        )
+
+add_executable(NetSim__test ${SOURCE_FILES} ${SOURCES_FILES_TESTS} tests/main_gtest.cpp)
+
+target_include_directories(NetSim__test PUBLIC
+        ../googletest-master/googlemock/include
+        ../googletest-master/googletest/include
+        )
+
+add_subdirectory(../googletest-master googletest-master)
+
+target_link_libraries(NetSim__test gmock)
