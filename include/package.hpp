@@ -2,15 +2,23 @@
 #define NETSIM_PACKAGE_HPP
 
 #include <string>
+#include <set>
+
+using ElementID=unsigned int;
 
 class Package {
 public:
-    Package(std::string id): id_(std::move(id)) {};
+    explicit Package(ElementID id): id_(id) {};
 
-    Package(Package&& package) = default;
+    Package(Package&& package) noexcept : id_(package.id_) {};
 
+    ElementID get_id() const { return id_;};
 private:
-    std::string id_;
+    ElementID id_;
+
+    static std::set<ElementID> assigned_IDs;
+
+    static std::set<ElementID> freed_IDs;
 };
 #endif //NETSIM_PACKAGE_HPP
 

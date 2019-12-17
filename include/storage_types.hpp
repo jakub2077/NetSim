@@ -11,12 +11,7 @@
 #include <vector>
 #include <algorithm>
 #include <deque>
-#include <set>
-
-using ElementID=unsigned int;
-
-static std::set<ElementID> assigned_IDs;
-static std::set<ElementID> freed_IDs;
+#include <list>
 
 
 enum PackageQueueType {
@@ -24,28 +19,40 @@ enum PackageQueueType {
     LIFO
 };
 
-//in progress
-class PackageQueue{
-public:
-    PackageQueue(PackageQueueType queue_type);
-private:
-    std::deque<Package> queue_;
-    PackageQueueType queue_type_;
-};
-
 class IPackageStockpile {
 public:
     virtual void push(Package&& package) = 0;
 
-    virtual bool empty() = 0;
+    virtual bool empty() const = 0;
 
-    virtual std::size_t size() = 0;
+    virtual std::size_t size() const = 0;
 };
 
 class IPackageQueue : IPackageStockpile {
+public:
     virtual Package pop() = 0;
 
-    virtual PackageQueueType get_queuetype() = 0;
+    virtual PackageQueueType get_queue_type() const = 0;
+};
+
+//in progress
+class PackageQueue: IPackageQueue {
+public:
+    explicit PackageQueue(PackageQueueType queue_type): queue_type_(queue_type) {};
+
+    void push(Package&& product) override;
+
+    bool empty() const override { return queue_.empty();};
+
+    std::size_t size() const override { return queue_.size();};
+
+    Package pop() override;
+
+    PackageQueueType  get_queue_type() const override { return queue_type_;};
+private:
+    std::list<Package> queue_;
+
+    PackageQueueType queue_type_;
 };
 
 #endif //NETSIM_STORAGE_TYPES_HPP

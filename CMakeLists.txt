@@ -20,6 +20,7 @@ add_executable(NetSim main.cpp ${SOURCE_FILES})
 
 set(SOURCES_FILES_TESTS
         tests/package_tests.cpp
+        tests/storage_tests.cpp
         )
 
 add_executable(NetSim__test ${SOURCE_FILES} ${SOURCES_FILES_TESTS} tests/main_gtest.cpp)
