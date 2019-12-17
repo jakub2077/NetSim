@@ -10,7 +10,8 @@ include_directories(
 )
 
 set(SOURCE_FILES
-        src/storage_types.cpp)
+        src/storage_types.cpp
+        src/package.cpp)
 
 
 add_executable(NetSim main.cpp ${SOURCE_FILES})
