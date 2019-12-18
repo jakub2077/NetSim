@@ -3,9 +3,9 @@
 #include "storage_types.hpp"
 
 TEST(PackageQueueTest, push_and_pop_FIFO) {
-    Package p1(1);
-    Package p2(2);
-    Package p3(3);
+    Package p1;
+    Package p2;
+    Package p3;
 
     PackageQueue q1(PackageQueueType::FIFO);
 
@@ -19,9 +19,9 @@ TEST(PackageQueueTest, push_and_pop_FIFO) {
 }
 
 TEST(PackageQueueTest, push_and_pop_LIFO) {
-    Package p1(1);
-    Package p2(2);
-    Package p3(3);
+    Package p1;
+    Package p2;
+    Package p3;
 
     PackageQueue q1(PackageQueueType::LIFO);
 

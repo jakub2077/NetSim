@@ -8,12 +8,16 @@ using ElementID=unsigned int;
 
 class Package {
 public:
-    explicit Package():{};
+    explicit Package();
 
     Package(Package&& package) noexcept : id_(package.id_) {};
     
-    Package & operator =(const Package&& ) noexcept{};
-    
+    //Package& operator= (const Package&& ) noexcept;
+
+    bool operator==(const Package& rhs) const;
+
+    bool operator!=(const Package& rhs) const;
+
     ElementID get_id() const { return id_;};
 private:
     ElementID id_;
