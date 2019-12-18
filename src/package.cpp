@@ -23,18 +23,13 @@ Package::Package() {
     }
 }
 
-/*
-Package& Package::operator= (const Package&&) noexcept{
-    ElementID tmp = this->id_;
-    delete this;
-    this->id_ = tmp;
-    return *this;
-}
-*/
-bool Package::operator==(const Package& rhs) const {
-    return id_ == rhs.id_;
+Package::~Package(){
+    freed_IDs.insert(id_);
+    assigned_IDs.erase(id_);
 }
 
-bool Package::operator!=(const Package& rhs) const {
-    return !(rhs == *this);
+Package & Package::operator= (Package&& aPackage) noexcept{
+    this->id_ = aPackage.id_;
+    delete []&aPackage;
+    return *this;
 }

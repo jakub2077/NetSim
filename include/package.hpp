@@ -10,13 +10,11 @@ class Package {
 public:
     explicit Package();
 
-    Package(Package&& package) noexcept : id_(package.id_) {};
+    ~Package();
     
-    //Package& operator= (const Package&& ) noexcept;
-
-    bool operator==(const Package& rhs) const;
-
-    bool operator!=(const Package& rhs) const;
+    Package(Package&& package) noexcept : id_(package.id_){};
+    
+    Package & operator =(Package&&) noexcept;
 
     ElementID get_id() const { return id_;};
 private:
