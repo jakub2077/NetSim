@@ -23,6 +23,10 @@ Package::Package() {
     }
 }
 
+bool Package::operator==(const Package &rhs) const {
+    return id_ == rhs.id_;
+}
+
 /*
 Package & Package::operator= (const Package&&) noexcept{
     ElementID tmp = this->id_;

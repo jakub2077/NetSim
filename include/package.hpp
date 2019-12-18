@@ -12,8 +12,8 @@ public:
 
     Package(Package&& package) noexcept : id_(package.id_) {};
 
-    //Package & operator= (const Package&& package) {return package.id_==id_;};
-    
+    bool operator==(const Package &rhs) const;
+
     ElementID get_id() const { return id_;};
 private:
     ElementID id_;
