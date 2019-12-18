@@ -23,6 +23,11 @@ Package::Package() {
     }
 }
 
+Package::~Package(){
+    freed_IDs.insert(id_);
+    assigned_IDs.erase(id_);
+}
+
 bool Package::operator==(const Package &rhs) const {
     return id_ == rhs.id_;
 }
