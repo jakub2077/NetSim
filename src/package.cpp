@@ -21,10 +21,11 @@ Package::Package() {
     }
 }
 
-
+/*
 Package & Package::operator= (const Package&&) noexcept{
     ElementID tmp = this->id_;
     delete this;
     this->id_ = tmp;
     return *this;
 }
+*/

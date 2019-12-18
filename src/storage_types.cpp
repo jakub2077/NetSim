@@ -42,6 +42,6 @@ Package PackageQueue::pop() {
             return package;
         }
     }
-    Package package(100000);
+    Package package;
     return package;
 }
