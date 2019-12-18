@@ -17,7 +17,7 @@ Package::Package() {
         assigned_IDs.insert(new_ID);
     }
     else{
-        ElementID new_ID= 0;
+        ElementID new_ID= 1;
         id_ = new_ID;
         assigned_IDs.insert(new_ID);
     }
