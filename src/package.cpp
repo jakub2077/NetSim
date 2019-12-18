@@ -14,10 +14,12 @@ Package::Package() {
     else if (not assigned_IDs.empty()){
         ElementID new_ID= *freed_IDs.end() + 1;
         id_ = new_ID;
+        assigned_IDs.insert(new_ID);
     }
     else{
         ElementID new_ID= 0;
         id_ = new_ID;
+        assigned_IDs.insert(new_ID);
     }
 }
 
