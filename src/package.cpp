@@ -1,4 +1,5 @@
 #include "package.hpp"
+#include "types.hpp"
 
 std::set<ElementID> Package::assigned_IDs = {};
 std::set<ElementID> Package::freed_IDs = {};
@@ -28,15 +29,8 @@ Package::~Package(){
     assigned_IDs.erase(id_);
 }
 
-bool Package::operator==(const Package &rhs) const {
-    return id_ == rhs.id_;
-}
-
-/*
-Package & Package::operator= (const Package&&) noexcept{
-    ElementID tmp = this->id_;
-    delete this;
-    this->id_ = tmp;
+Package & Package::operator= (Package&& aPackage) noexcept{
+    this->id_ = aPackage.id_;
+    delete []&aPackage;
     return *this;
 }
-*/

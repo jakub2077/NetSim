@@ -1,18 +1,18 @@
 #ifndef NETSIM_PACKAGE_HPP
 #define NETSIM_PACKAGE_HPP
 
-#include <string>
-#include <set>
+#include "types.hpp"
 
-using ElementID=unsigned int;
 
 class Package {
 public:
     explicit Package();
 
-    Package(Package&& package) noexcept : id_(package.id_) {};
-
-    bool operator==(const Package &rhs) const;
+    ~Package();
+    
+    Package(Package&& package) noexcept : id_(package.id_){};
+    
+    Package & operator =(Package&&) noexcept;
 
     ElementID get_id() const { return id_;};
 
