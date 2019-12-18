@@ -16,7 +16,6 @@ public:
 
     ElementID get_id() const { return id_;};
 
-    void reset_id_count() {assigned_IDs.clear(); freed_IDs.clear();}
 private:
     ElementID id_;
 
