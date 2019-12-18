@@ -3,17 +3,6 @@
 
 #include "package.hpp"
 
-#include <cmath>
-#include <functional>
-#include <iostream>
-#include <string>
-#include <map>
-#include <vector>
-#include <algorithm>
-#include <deque>
-#include <list>
-
-
 enum PackageQueueType {
     FIFO,
     LIFO
