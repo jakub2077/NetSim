@@ -3,8 +3,8 @@
 
 #include <string>
 #include <set>
+#include "types.hpp"
 
-using ElementID=unsigned int;
 
 class Package {
 public:
