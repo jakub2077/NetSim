@@ -12,7 +12,7 @@ Package::Package() {
         assigned_IDs.insert(first_free_ID);
     }
     else if (not assigned_IDs.empty()){
-        ElementID new_ID= *freed_IDs.end() + 1;
+        ElementID new_ID= *assigned_IDs.end() + 1;
         id_ = new_ID;
         assigned_IDs.insert(new_ID);
     }
