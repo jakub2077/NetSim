@@ -3,6 +3,9 @@
 #include "storage_types.hpp"
 
 TEST(PackageQueueTest, push_and_pop_FIFO) {
+    Package p0;
+    p0.reset_id_count();
+
     Package p1;
     Package p2;
     Package p3;
@@ -19,6 +22,9 @@ TEST(PackageQueueTest, push_and_pop_FIFO) {
 }
 
 TEST(PackageQueueTest, push_and_pop_LIFO) {
+    Package p0;
+    p0.reset_id_count();
+
     Package p1;
     Package p2;
     Package p3;
