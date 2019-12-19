@@ -18,7 +18,7 @@ Package::Package() {
         assigned_IDs.insert(new_ID);
     }
     else{
-        ElementID new_ID= 1;
+        ElementID new_ID = 1;
         id_ = new_ID;
         assigned_IDs.insert(new_ID);
     }
@@ -31,6 +31,6 @@ Package::~Package(){
 
 Package & Package::operator= (Package&& aPackage) noexcept{
     this->id_ = aPackage.id_;
-    delete []&aPackage;
+    aPackage.id_ = 0;
     return *this;
 }
