@@ -4,6 +4,8 @@
 #include <iostream>
 #include <list>
 #include <set>
+#include <map>
+#include <stdlib.h>
 
 using ElementID=unsigned int;
 //????
