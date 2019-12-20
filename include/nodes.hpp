@@ -2,10 +2,11 @@
 #define NETSIM_NODES_HPP
 
 #include "types.hpp"
+#include "package.hpp"
 
 enum ReceiverType{
     Worker,
-    Storage;
+    Storage
 };
 
 class ReceiverPreferences{
@@ -23,13 +24,13 @@ public:
 //not implemented
 class PackageSender{
 public:
-    void send_package();
+    void send_package() {};
 
-    std::optional<Package> get_sending_buffer();
+    std::optional<Package> get_sending_buffer() {return std::optional<Package>();};
 
     ReceiverPreferences receiver_preferences;
 protected:
-    void push_package(Package);
+    void push_package(Package) {};
 
 };
 
