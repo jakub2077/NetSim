@@ -6,7 +6,7 @@ TEST(ReceiverPreferencesTest, Insertion){
     Storehouse s2(2);
     Storehouse s1(1);
 
-    double (*fixed_prob_ptr)(){random_prob};
+    double (*fixed_prob_ptr)(){fixed_prob};
 
     ReceiverPreferences receiverPreferences(fixed_prob_ptr);
 
