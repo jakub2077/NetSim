@@ -3,6 +3,7 @@
 
 #include "types.hpp"
 #include "package.hpp"
+#include "helpers.hpp"
 
 enum ReceiverType{
     Worker,
@@ -20,17 +21,19 @@ public:
 
 class ReceiverPreferences{
 public:
+    ReceiverPreferences(double (*fcnPtr)()) {rnd_fcn = fcnPtr;};
+
     using preferences_t = std::map<IPackageReceiver*, double>;
 
     using const_iterator = preferences_t::const_iterator;
 
     using iterator = preferences_t::iterator;
 
-    void add_receiver(IPackageReceiver* receiver, double probability);
+    void add_receiver(IPackageReceiver* receiver);
 
     void remove_receiver(IPackageReceiver* receiver);
 
-    IPackageReceiver* choose_receiver(double fake_rnd = -1) ;
+    IPackageReceiver* choose_receiver(double fake_rnd);
 
     const_iterator cbegin() const { return receivers_.cbegin();}
 
@@ -42,6 +45,8 @@ public:
 
 private:
     preferences_t receivers_;
+
+    double (*rnd_fcn)();
 };
 
 //not implemented

@@ -1,10 +1,16 @@
 #include "nodes.hpp"
 
-void ReceiverPreferences::add_receiver(IPackageReceiver* receiver, double probability) {
-    for (auto& [r,p] : receivers_){
-        p = p*(1-probability);
+void ReceiverPreferences::add_receiver(IPackageReceiver* receiver) {
+    if (receivers_.empty()){
+        receivers_[receiver] = 1;
+    } else {
+        double probability = rnd_fcn();
+
+        for (auto& [r,p] : receivers_){
+            p = p*(1-probability);
+        }
+        receivers_[receiver] = probability;
     }
-    receivers_[receiver] = probability;
 }
 
 void ReceiverPreferences::remove_receiver(IPackageReceiver* receiver) {
