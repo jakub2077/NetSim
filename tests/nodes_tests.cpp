@@ -7,7 +7,6 @@ TEST(ReceiverPreferencesTest, Insertion){
     Storehouse s1(1);
 
     double (*fixed_prob_ptr)(){fixed_prob};
-
     ReceiverPreferences receiverPreferences(fixed_prob_ptr);
 
     receiverPreferences.add_receiver(&s1);
@@ -31,7 +30,6 @@ TEST(ReceiverPreferencesTest, Randomizer){
     Storehouse s1(1);
 
     double (*fixed_prob_ptr)(){fixed_prob};
-
     ReceiverPreferences receiverPreferences(fixed_prob_ptr);
 
     double rnd=0.8;
