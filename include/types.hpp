@@ -6,11 +6,11 @@
 #include <set>
 #include <map>
 #include <stdlib.h>
+#include <optional>
 
 using ElementID=unsigned int;
-//????
-using Time=unsigned long long;
-using TimeOffset=unsigned long long;
+using Time=unsigned int;
+using TimeOffset=unsigned int;
 using ProbabilityGenerator=unsigned long long;
 
 #endif //NETSIM_TYPES_HPP

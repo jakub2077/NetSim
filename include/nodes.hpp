@@ -52,14 +52,17 @@ private:
 //not implemented
 class PackageSender{
 public:
-    void send_package() {};
+    void send_package();
 
-    std::optional<Package> get_sending_buffer() {return std::optional<Package>();};
+    std::optional<Package> get_sending_buffer();// {return std::optional<Package>();};
 
     ReceiverPreferences receiver_preferences;
-protected:
-    void push_package(Package) {};
 
+protected:
+    void push_package(Package&& package);
+
+private:
+    static std::optional<Package> buffer;
 };
 
 //not implemented (podstawowa implementacja do tetów)

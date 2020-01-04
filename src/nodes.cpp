@@ -1,5 +1,20 @@
 #include "nodes.hpp"
 
+void PackageSender::send_package(){
+    IPackageReceiver* receiver = receiver_preferences.choose_receiver(-1);
+    std::optional<Package> sending_buffer = get_sending_buffer();
+    receiver->receive_package(std::move(sending_buffer.value()));
+    buffer.reset();
+}
+
+std::optional<Package> PackageSender::get_sending_buffer(){
+    return std::move(buffer);
+}
+
+void PackageSender::push_package(Package&& package){
+    buffer.emplace(std::move(package));
+}
+
 void ReceiverPreferences::add_receiver(IPackageReceiver* receiver) {
     if (receivers_.empty()){
         receivers_[receiver] = 1;
