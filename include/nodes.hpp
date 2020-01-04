@@ -79,5 +79,19 @@ private:
     ElementID id_;
 };
 
+class Ramp: public PackageSender{
+public:
+    // Ramp(ElementID id, TimeOffset di) : id_(id), di_(di) {}
+
+    void deliver_goods(Time t) {}
+
+    TimeOffset get_delivry_interval() { return  di_;}
+
+    ElementID get_id() { return id_;}
+private:
+    ElementID id_;
+    TimeOffset di_;
+};
+
 
 #endif //NETSIM_NODES_HPP
