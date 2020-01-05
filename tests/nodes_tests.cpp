@@ -33,11 +33,11 @@ TEST(ReceiverPreferencesTest, Insertion){
 }
 
 TEST(ReceiverPreferencesTest, Randomizer){
-    Storehouse s3(3);
-    Storehouse s2(2);
     Storehouse s1(1);
+    Storehouse s2(2);
+    Storehouse s3(3);
 
-    ProbabilityGenerator f = fixed_prob_05;
+    ProbabilityGenerator f = fixed_prob_09;
     ReceiverPreferences receiverPreferences(f);
 
     receiverPreferences.add_receiver(&s1);
@@ -46,7 +46,7 @@ TEST(ReceiverPreferencesTest, Randomizer){
 
     auto s = receiverPreferences.choose_receiver();
 
-    EXPECT_EQ(s2.get_id(),s->get_id());
+    EXPECT_EQ(s3.get_id(),s->get_id());
 }
 
 

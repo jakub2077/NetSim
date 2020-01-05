@@ -9,4 +9,6 @@ double fixed_prob_05();
 
 double fixed_prob_06();
 
+double fixed_prob_09();
+
 #endif //NETSIM_HELPERS_HPP

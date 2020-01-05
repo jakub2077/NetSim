@@ -11,3 +11,7 @@ double fixed_prob_05(){
 double fixed_prob_06(){
     return 0.6;
 }
+
+double fixed_prob_09(){
+    return 0.9;
+}

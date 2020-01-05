@@ -25,7 +25,7 @@ void ReceiverPreferences::add_receiver(IPackageReceiver* receiver) {
         receivers_[receiver] = 1;
     } else {
         double probability = 1.0/(receivers_.size()+1);
-        std::cout << probability;
+
         for (auto& [r,p] : receivers_){
             p = p*(1-probability);
         }
@@ -44,12 +44,13 @@ IPackageReceiver* ReceiverPreferences::choose_receiver() {
     auto rnd = pg_();
 
     double distr=0;
-    for (auto [r,p] : receivers_){
-        if(rnd<(distr+p)){
-            return r;
+    for(auto it=receivers_.rbegin();it!=receivers_.rend();++it){
+        if(rnd<(distr+it->second)){
+            return it->first;
         }
-        distr += p;
+        distr += it->second;
     }
+
     auto [r,p] = *receivers_.begin();
     return r;
 }
