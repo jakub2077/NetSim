@@ -4,6 +4,7 @@
 #include "types.hpp"
 #include "package.hpp"
 #include "helpers.hpp"
+#include "storage_types.hpp"
 
 enum ReceiverType{
     Worker,
@@ -21,7 +22,7 @@ public:
 
 class ReceiverPreferences{
 public:
-    ReceiverPreferences(ProbabilityGenerator pg): pg_(pg) {};
+    ReceiverPreferences(ProbabilityGenerator pg = random_prob): pg_(pg) {};
 
     using preferences_t = std::map<IPackageReceiver*, double>;
 
@@ -33,7 +34,7 @@ public:
 
     void remove_receiver(IPackageReceiver* receiver);
 
-    IPackageReceiver* choose_receiver(double fake_rnd = -1);
+    IPackageReceiver* choose_receiver();
 
     const_iterator cbegin() const { return receivers_.cbegin();}
 
@@ -52,7 +53,9 @@ private:
 //not implemented
 class PackageSender{
 public:
-    PackageSender(const ReceiverPreferences& receiver_preferences);
+    PackageSender() {};
+
+    PackageSender(ReceiverPreferences& receiver_preferences);
 
     void send_package();
 
@@ -70,19 +73,23 @@ private:
 //not implemented (podstawowa implementacja do tetów)
 class Storehouse: public IPackageReceiver{
 public:
-    Storehouse(ElementID id_) : id_(id_) {}
+    Storehouse(ElementID id, std::unique_ptr<IPackageStockpile> d = nullptr) : id_(id),  d_(d.release()){}
 
-    void receive_package(Package&& p) override {(void)p;}
+    void receive_package(Package&& p) override {d_.get()->push(std::move(p));}
 
     ReceiverType get_receiver_type() const override { return ReceiverType::Storage;}
 
     ElementID get_id() const override {return id_;}
 private:
     ElementID id_;
+
+    std::unique_ptr<IPackageStockpile> d_;
 };
 
 class Ramp: public PackageSender{
 public:
+    Ramp(ElementID id, TimeOffset di): PackageSender(), id_(id), di_(di) {}
+
     Ramp(ElementID id, TimeOffset di, ReceiverPreferences& receiverPreferences) : PackageSender(receiverPreferences), id_(id), di_(di) {}
 
     void deliver_goods(Time t);
@@ -92,6 +99,7 @@ public:
     ElementID get_id() { return id_;}
 private:
     ElementID id_;
+
     TimeOffset di_;
 };
 

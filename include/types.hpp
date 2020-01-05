@@ -9,6 +9,7 @@
 #include <optional>
 #include <functional>
 #include <array>
+#include <memory>
 
 using ElementID=unsigned int;
 using Time=unsigned int;

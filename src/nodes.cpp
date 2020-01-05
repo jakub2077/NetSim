@@ -14,15 +14,15 @@ void PackageSender::push_package(Package&& package){
     buffer.emplace(std::move(package));
 }
 
-PackageSender::PackageSender(const ReceiverPreferences& receiver_preferences) : receiver_preferences(
+PackageSender::PackageSender(ReceiverPreferences& receiver_preferences) : receiver_preferences(
         receiver_preferences) {}
 
 void ReceiverPreferences::add_receiver(IPackageReceiver* receiver) {
     if (receivers_.empty()){
         receivers_[receiver] = 1;
     } else {
-        double probability = pg_();
-
+        double probability = 1/(receivers_.size()+1);
+        std::cout << probability;
         for (auto& [r,p] : receivers_){
             p = p*(1-probability);
         }
@@ -37,14 +37,8 @@ void ReceiverPreferences::remove_receiver(IPackageReceiver* receiver) {
     receivers_.erase(receiver);
 }
 
-IPackageReceiver* ReceiverPreferences::choose_receiver(double fake_rnd) {
-    double rnd;
-
-    if (fake_rnd!=-1){
-        rnd = fake_rnd;
-    } else{
-        rnd =((double)rand() / (RAND_MAX));
-    }
+IPackageReceiver* ReceiverPreferences::choose_receiver() {
+    auto rnd = pg_();
 
     double distr=0;
     for (auto [r,p] : receivers_){
@@ -61,11 +55,7 @@ void Ramp::deliver_goods(Time t) {
     if (t==0) {
         Package p1;
         push_package(std::move(p1));
-        send_package();
-        Package p2;
-        push_package(std::move(p2));
     } else if (t%di_==0) {
-        send_package();
         Package p3;
         push_package(std::move(p3));
     }

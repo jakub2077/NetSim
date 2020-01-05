@@ -44,4 +44,16 @@ private:
     PackageQueueType queue_type_;
 };
 
+class PackageStockpile: IPackageStockpile {
+public:
+    void push(Package&& package) override {list_.push_back(std::move(package));}
+
+    bool empty() const override { return list_.empty();};
+
+    std::size_t size() const override { return list_.size();};
+
+private:
+    std::list<Package> list_;
+};
+
 #endif //NETSIM_STORAGE_TYPES_HPP
