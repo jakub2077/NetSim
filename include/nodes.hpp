@@ -77,7 +77,7 @@ public:
 
     void receive_package(Package&& p) override {d_->push(std::move(p));}
 
-    ReceiverType get_receiver_type() const override { return ReceiverType::Storage;}
+    ReceiverType get_receiver_type() const override {return ReceiverType::Storage;}
 
     ElementID get_id() const override {return id_;}
 private:
@@ -94,9 +94,9 @@ public:
 
     void deliver_goods(Time t);
 
-    TimeOffset get_delivry_interval() { return  di_;}
+    TimeOffset get_delivry_interval() {return  di_;}
 
-    ElementID get_id() { return id_;}
+    ElementID get_id() {return id_;}
 private:
     ElementID id_;
 
@@ -107,7 +107,7 @@ private:
 
 class Worker: public PackageSender, IPackageReceiver,IPackageQueue{
 public:
-    Worker(ElementID id, TimeOffset pd, std::unique_ptr<IPackageQueue> q): q_(q), id_(id), pd_(pd){}
+    Worker(ElementID id, TimeOffset pd, std::unique_ptr<IPackageQueue> q, ReceiverPreferences& receiverPreferences) : PackageSender(receiverPreferences), q_(q), id_(id), pd_(pd){}
 
     void do_work(Time t);
 
@@ -126,9 +126,9 @@ private:
 
     TimeOffset pd_;
 
-    Time processing_start_time;
+    Time processing_start_time = 0;
 
-    Time left_processing_time;
+    Time actual_processing_time = 0;
 
     std::unique_ptr<IPackageQueue> q_;
 };
