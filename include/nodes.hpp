@@ -130,7 +130,10 @@ private:
 
     Time actual_processing_time = 0;
 
-    std::unique_ptr<IPackageQueue> q_;      //Aktualnie przetwarzany produkt
+    std::unique_ptr<IPackageQueue> q_;
+    
+    static std::optional<Package> now_processed;       //Aktualnie przetwarzany produkt
+
 };
 
 
