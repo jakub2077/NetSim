@@ -7,10 +7,12 @@
 #include <map>
 #include <stdlib.h>
 #include <optional>
+#include <functional>
+#include <array>
 
 using ElementID=unsigned int;
 using Time=unsigned int;
 using TimeOffset=unsigned int;
-using ProbabilityGenerator=unsigned long long;
+using ProbabilityGenerator=std::function<double()>;
 
 #endif //NETSIM_TYPES_HPP

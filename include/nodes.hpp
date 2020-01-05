@@ -21,7 +21,7 @@ public:
 
 class ReceiverPreferences{
 public:
-    ReceiverPreferences(double (*fcnPtr)()) {rnd_fcn = fcnPtr;};
+    ReceiverPreferences(ProbabilityGenerator pg): pg_(pg) {};
 
     using preferences_t = std::map<IPackageReceiver*, double>;
 
@@ -33,7 +33,7 @@ public:
 
     void remove_receiver(IPackageReceiver* receiver);
 
-    IPackageReceiver* choose_receiver(double fake_rnd);
+    IPackageReceiver* choose_receiver(double fake_rnd = -1);
 
     const_iterator cbegin() const { return receivers_.cbegin();}
 
@@ -46,23 +46,25 @@ public:
 private:
     preferences_t receivers_;
 
-    double (*rnd_fcn)();
+    ProbabilityGenerator pg_;
 };
 
 //not implemented
 class PackageSender{
 public:
+    PackageSender(const ReceiverPreferences& receiver_preferences);
+
     void send_package();
 
     std::optional<Package> get_sending_buffer();// {return std::optional<Package>();};
 
     ReceiverPreferences receiver_preferences;
 
-protected:
+//protected:
     void push_package(Package&& package);
 
 private:
-    static std::optional<Package> buffer;
+    std::optional<Package> buffer;
 };
 
 //not implemented (podstawowa implementacja do tetów)
@@ -81,9 +83,9 @@ private:
 
 class Ramp: public PackageSender{
 public:
-    // Ramp(ElementID id, TimeOffset di) : id_(id), di_(di) {}
+    Ramp(ElementID id, TimeOffset di, ReceiverPreferences& receiverPreferences) : PackageSender(receiverPreferences), id_(id), di_(di) {}
 
-    void deliver_goods(Time t) {}
+    void deliver_goods(Time t);
 
     TimeOffset get_delivry_interval() { return  di_;}
 
