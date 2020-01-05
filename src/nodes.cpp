@@ -66,17 +66,22 @@ void Ramp::deliver_goods(Time t) {
 }
 
 void Worker::do_work(Time t) {
-    if (q_.size() > 0)
+    if (now_processed.has_value()){
         if (actual_processing_time == 0) {
             processing_start_time = t;
-            actual_processing_time = t;
-            now_processed = q_.pop();
+            actual_processing_time = t + pd_;
+            now_processed = q_->pop();
         }
-        else if (actual_processing_time == t + pd_){
+        if (actual_processing_time == t) {
             actual_processing_time = 0;
-            push_package(now_processed);
+            push_package(std::move(now_processed.value()));
+            now_processed.reset();
         }
-        else{
+        else {
             actual_processing_time--;
         }
+    }
+
 }
+
+

@@ -25,7 +25,7 @@ public:
 };
 
 //in progress
-class PackageQueue: IPackageQueue {
+class PackageQueue: public IPackageQueue {
 public:
     explicit PackageQueue(PackageQueueType queue_type): queue_type_(queue_type) {};
 

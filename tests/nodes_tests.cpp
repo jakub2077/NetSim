@@ -78,3 +78,39 @@ TEST(RampAndStorehouseTest, All){
     EXPECT_TRUE(true);
 }
 
+TEST(WorkerReceiveAndSendTest, All){
+    PackageStockpile p1;
+
+    std::unique_ptr<IPackageStockpile> ps1 = std::make_unique<PackageStockpile>(std::move(p1));
+
+    Storehouse s1(1,std::move(ps1));
+
+    ProbabilityGenerator f = fixed_prob_06;
+    ReceiverPreferences receiverPreferences1(f);
+    receiverPreferences1.add_receiver(&s1);
+
+
+    std::unique_ptr<IPackageQueue> pq1 = std::make_unique<PackageQueue>(PackageQueue(FIFO));
+    class Worker w1(1,2,std::move(pq1),receiverPreferences1);
+
+    ReceiverPreferences receiverPreferences2(f);
+    receiverPreferences2.add_receiver(&w1);
+    Ramp r1(1,2,receiverPreferences2);
+
+    Time i=0;
+    while (i<3) {
+        //Dostawa
+        r1.deliver_goods(i);
+
+        //Prekazanie
+        r1.send_package();
+        w1.send_package();
+
+        //Przetworzenie
+        w1.do_work(i);
+        i++;
+    }
+
+    EXPECT_TRUE(true);
+}
+

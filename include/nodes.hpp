@@ -107,13 +107,13 @@ private:
 
 class Worker: public PackageSender, public IPackageReceiver{
 public:
-    Worker(ElementID id, TimeOffset pd, std::unique_ptr<IPackageQueue> q, ReceiverPreferences& receiverPreferences) : PackageSender(receiverPreferences), q_(q), id_(id), pd_(pd){}
+    Worker(ElementID id, TimeOffset pd, std::unique_ptr<IPackageQueue> q, ReceiverPreferences& receiverPreferences) : PackageSender(receiverPreferences), id_(id), pd_(pd), q_(q.release()){}
 
     void do_work(Time t);
 
-    TimeOffset get_processing_duration() {return pd_};
+    TimeOffset get_processing_duration() {return pd_;}
 
-    Time get_processing_start_time() {return processing_start_time};
+    Time get_processing_start_time() {return processing_start_time;}
 
     void receive_package(Package&& p) override {q_->push(std::move(p));}
 
@@ -131,9 +131,8 @@ private:
     Time actual_processing_time = 0;
 
     std::unique_ptr<IPackageQueue> q_;
-    
-    static std::optional<Package> now_processed;       //Aktualnie przetwarzany produkt
 
+    std::optional<Package> now_processed;//Aktualnie przetwarzany produkt
 };
 
 
