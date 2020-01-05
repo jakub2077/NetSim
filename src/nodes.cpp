@@ -64,3 +64,10 @@ void Ramp::deliver_goods(Time t) {
         push_package(std::move(p3));
     }
 }
+
+void Worker::do_work(Time t){
+    if (left_processing_time == 0):
+        left_processing_time = processing_start_time;
+    else: 
+        left_processing_time--
+}
