@@ -63,19 +63,19 @@ public:
 
     ReceiverPreferences receiver_preferences;
 
-//protected:
+protected:
     void push_package(Package&& package);
 
 private:
     std::optional<Package> buffer;
 };
 
-//not implemented (podstawowa implementacja do tetów)
+
 class Storehouse: public IPackageReceiver{
 public:
     Storehouse(ElementID id, std::unique_ptr<IPackageStockpile> d = nullptr) : id_(id),  d_(d.release()){}
 
-    void receive_package(Package&& p) override {d_.get()->push(std::move(p));}
+    void receive_package(Package&& p) override {d_->push(std::move(p));}
 
     ReceiverType get_receiver_type() const override { return ReceiverType::Storage;}
 

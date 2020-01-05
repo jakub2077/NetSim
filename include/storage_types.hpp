@@ -44,8 +44,12 @@ private:
     PackageQueueType queue_type_;
 };
 
-class PackageStockpile: IPackageStockpile {
+class PackageStockpile: public IPackageStockpile {
 public:
+    PackageStockpile() = default;
+
+    PackageStockpile(std::list<Package> list): list_(std::move(list)) {}
+
     void push(Package&& package) override {list_.push_back(std::move(package));}
 
     bool empty() const override { return list_.empty();};

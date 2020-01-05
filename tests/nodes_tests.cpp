@@ -10,7 +10,7 @@ TEST(ReceiverPreferencesTest, Insertion){
     Storehouse s2(2);
     Storehouse s1(1);
 
-    ProbabilityGenerator f = fixed_prob;
+    ProbabilityGenerator f = fixed_prob_05;
     ReceiverPreferences receiverPreferences(f);
 
     receiverPreferences.add_receiver(&s1);
@@ -21,13 +21,9 @@ TEST(ReceiverPreferencesTest, Insertion){
     auto [r2,p2] = *receiverPreferences.begin();
     auto [r3,p3] = *receiverPreferences.begin();
 
-    double a=1;
-    double b=3;
-    double p=a/b;
-
-    EXPECT_EQ(p1,p);
-    EXPECT_EQ(p2,p);
-    EXPECT_EQ(p3,p);
+    EXPECT_DOUBLE_EQ(p1,1.0/3.0);
+    EXPECT_DOUBLE_EQ(p2,1.0/3.0);
+    EXPECT_DOUBLE_EQ(p3,1.0/3.0);
 
     receiverPreferences.remove_receiver(&s3);
 
@@ -41,7 +37,7 @@ TEST(ReceiverPreferencesTest, Randomizer){
     Storehouse s2(2);
     Storehouse s1(1);
 
-    ProbabilityGenerator f = fixed_prob;
+    ProbabilityGenerator f = fixed_prob_05;
     ReceiverPreferences receiverPreferences(f);
 
     receiverPreferences.add_receiver(&s1);
@@ -50,10 +46,10 @@ TEST(ReceiverPreferencesTest, Randomizer){
 
     auto s = receiverPreferences.choose_receiver();
 
-    EXPECT_EQ(s3.get_id(),s->get_id());
+    EXPECT_EQ(s2.get_id(),s->get_id());
 }
 
-/*
+
 TEST(RampAndStorehouseTest, All){
     PackageStockpile p1;
     PackageStockpile p2;
@@ -64,7 +60,7 @@ TEST(RampAndStorehouseTest, All){
     Storehouse s1(1,std::move(ps1));
     Storehouse s2(2,std::move(ps2));
 
-    ProbabilityGenerator f = fixed_prob;
+    ProbabilityGenerator f = fixed_prob_06;
     ReceiverPreferences receiverPreferences(f);
 
     receiverPreferences.add_receiver(&s1);
@@ -73,13 +69,12 @@ TEST(RampAndStorehouseTest, All){
     Ramp r1(1,2,receiverPreferences);
 
     Time i=0;
-
     while (i<10) {
         r1.deliver_goods(i);
-
+        r1.send_package();
         i++;
     }
 
     EXPECT_TRUE(true);
 }
-*/
+

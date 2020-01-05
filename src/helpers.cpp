@@ -4,6 +4,10 @@ double random_prob(){
     return ((double)rand() / (RAND_MAX));
 }
 
-double fixed_prob(){
+double fixed_prob_05(){
     return 0.5;
+}
+
+double fixed_prob_06(){
+    return 0.6;
 }
