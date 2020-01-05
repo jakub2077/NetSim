@@ -94,7 +94,7 @@ public:
 
     void deliver_goods(Time t);
 
-    TimeOffset get_delivry_interval() {return  di_;}
+    TimeOffset get_delivery_interval() {return  di_;}
 
     ElementID get_id() {return id_;}
 private:

@@ -113,3 +113,27 @@ TEST(WorkerReceiveAndSendTest, All){
     EXPECT_TRUE(true);
 }
 
+TEST(PackageSenderTest, BufferClear){
+    PackageStockpile p2;
+
+    std::unique_ptr<IPackageStockpile> ps2 = std::make_unique<PackageStockpile>(std::move(p2));
+
+    Storehouse s2(1,std::move(ps2));
+
+    ProbabilityGenerator f1 = fixed_prob_06;
+    ReceiverPreferences receiverPreferences2(f1);
+    receiverPreferences2.add_receiver(&s2);
+
+
+    std::unique_ptr<IPackageQueue> pq2 = std::make_unique<PackageQueue>(PackageQueue(FIFO));
+    class Worker w1(1,2,std::move(pq2),receiverPreferences2);
+
+    ReceiverPreferences receiverPreferences3(f1);
+    receiverPreferences3.add_receiver(&w1);
+    Ramp r1(1,2,receiverPreferences3);
+
+    r1.deliver_goods(0);
+    r1.send_package();
+    EXPECT_EQ(r1.get_sending_buffer(),std::nullopt);
+}
+
