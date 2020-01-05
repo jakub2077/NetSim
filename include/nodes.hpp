@@ -104,4 +104,35 @@ private:
 };
 
 
+class Worker: public PackageSender, IPackageReceiver{
+public:
+    Worker(ElementID id, TimeOffset pd, std::unique_ptr<IPackageQueue> q): , id_(id), pd_(pd){}
+
+    void do_work(Time t) {}
+
+    TimeOffset get_processing_duration() {}
+
+    Time get_processing_start_time() {}
+
+    void receive_package(Package&& p) override {(void)p;}
+
+    ReceiverType get_receiver_type() const override {return ReceiverType::Storage;}
+
+    ElementID get_id() const override {return id_;}
+
+private:
+    ElementID id_;
+
+    TimeOffset pd_;
+
+    Time processing_start_time;
+
+    TimeOffset processing_duration;
+
+    Time left_processing_time;
+
+};
+
+
+
 #endif //NETSIM_NODES_HPP
