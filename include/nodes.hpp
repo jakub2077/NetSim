@@ -104,17 +104,18 @@ private:
 };
 
 
-class Worker: public PackageSender, IPackageReceiver{
+
+class Worker: public PackageSender, IPackageReceiver,IPackageQueue{
 public:
-    Worker(ElementID id, TimeOffset pd, std::unique_ptr<IPackageQueue> q): , id_(id), pd_(pd){}
+    Worker(ElementID id, TimeOffset pd, std::unique_ptr<IPackageQueue> q): q_(q), id_(id), pd_(pd){}
 
-    void do_work(Time t) {}
+    void do_work(Time t);
 
-    TimeOffset get_processing_duration() {}
+    TimeOffset get_processing_duration() {return pd_};
 
-    Time get_processing_start_time() {}
+    Time get_processing_start_time() {return processing_start_time};
 
-    void receive_package(Package&& p) override {(void)p;}
+    void receive_package(Package&& p) override {q_->push(p)}
 
     ReceiverType get_receiver_type() const override {return ReceiverType::Storage;}
 
@@ -127,11 +128,11 @@ private:
 
     Time processing_start_time;
 
-    TimeOffset processing_duration;
-
     Time left_processing_time;
 
+    std::unique_ptr<IPackageQueue> q_;
 };
+
 
 
 
