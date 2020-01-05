@@ -66,8 +66,12 @@ void Ramp::deliver_goods(Time t) {
 }
 
 void Worker::do_work(Time t){
-    if (left_processing_time == 0):
+    processing_start_time = t;
+
+    if (left_processing_time == 0) {
         left_processing_time = processing_start_time;
-    else: 
+    }
+    else {
         left_processing_time--
+    }
 }
