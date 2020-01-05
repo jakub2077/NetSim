@@ -77,11 +77,7 @@ void Worker::do_work(Time t) {
             push_package(std::move(now_processed.value()));
             now_processed.reset();
         }
-        else {
-            actual_processing_time--;
-        }
     }
-
 }
 
 

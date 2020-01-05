@@ -98,7 +98,7 @@ TEST(WorkerReceiveAndSendTest, All){
     Ramp r1(1,2,receiverPreferences2);
 
     Time i=0;
-    while (i<3) {
+    while (i<1) {
         //Dostawa
         r1.deliver_goods(i);
 
@@ -110,7 +110,6 @@ TEST(WorkerReceiveAndSendTest, All){
         w1.do_work(i);
         i++;
     }
-
     EXPECT_TRUE(true);
 }
 
