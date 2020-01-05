@@ -17,7 +17,7 @@ public:
     virtual std::size_t size() const = 0;
 };
 
-class IPackageQueue : IPackageStockpile {
+class IPackageQueue : public IPackageStockpile {
 public:
     virtual Package pop() = 0;
 

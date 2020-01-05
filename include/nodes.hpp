@@ -105,7 +105,7 @@ private:
 
 
 
-class Worker: public PackageSender, IPackageReceiver,IPackageQueue{
+class Worker: public PackageSender, public IPackageReceiver{
 public:
     Worker(ElementID id, TimeOffset pd, std::unique_ptr<IPackageQueue> q, ReceiverPreferences& receiverPreferences) : PackageSender(receiverPreferences), q_(q), id_(id), pd_(pd){}
 
@@ -115,7 +115,7 @@ public:
 
     Time get_processing_start_time() {return processing_start_time};
 
-    void receive_package(Package&& p) override {q_->push(p)}
+    void receive_package(Package&& p) override {q_->push(std::move(p));}
 
     ReceiverType get_receiver_type() const override {return ReceiverType::Storage;}
 
