@@ -10,6 +10,7 @@
 #include <functional>
 #include <array>
 #include <memory>
+#include <random>
 
 using ElementID=unsigned int;
 using Time=unsigned int;

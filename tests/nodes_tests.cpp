@@ -51,14 +51,8 @@ TEST(ReceiverPreferencesTest, Randomizer){
 
 
 TEST(RampAndStorehouseTest, All){
-    PackageStockpile p1;
-    PackageStockpile p2;
-
-    std::unique_ptr<IPackageStockpile> ps1 = std::make_unique<PackageStockpile>(std::move(p1));
-    std::unique_ptr<IPackageStockpile> ps2 = std::make_unique<PackageStockpile>(std::move(p1));
-
-    Storehouse s1(1,std::move(ps1));
-    Storehouse s2(2,std::move(ps2));
+    Storehouse s1(1);
+    Storehouse s2(2);
 
     ProbabilityGenerator f = fixed_prob_06;
     ReceiverPreferences receiverPreferences(f);
@@ -68,22 +62,73 @@ TEST(RampAndStorehouseTest, All){
 
     Ramp r1(1,2,receiverPreferences);
 
-    Time i=0;
+    Time i=1;
     while (i<10) {
         r1.deliver_goods(i);
         r1.send_package();
         i++;
     }
 
-    EXPECT_TRUE(true);
+    EXPECT_EQ(s2.get_queue_size(),5);
 }
 
-TEST(WorkerReceiveAndSendTest, All){
-    PackageStockpile p1;
+TEST(RampAndStorehouseTest, Alll){
+    Storehouse s1(1);
+    Storehouse s2(2);
 
-    std::unique_ptr<IPackageStockpile> ps1 = std::make_unique<PackageStockpile>(std::move(p1));
+    Ramp r1(1,2);
 
-    Storehouse s1(1,std::move(ps1));
+    r1.receiver_preferences.add_receiver(&s1);
+    r1.receiver_preferences.add_receiver(&s2);
+
+
+    Time i=1;
+    while (i<10) {
+        r1.deliver_goods(i);
+        r1.send_package();
+        i++;
+    }
+
+    EXPECT_EQ(s1.get_queue_size(),2);
+    EXPECT_EQ(s2.get_queue_size(),3);
+}
+
+TEST(WorkerReceiveAndSendTest, RampAndWorkerNormal){
+    Storehouse s1(1);
+
+    ProbabilityGenerator f = fixed_prob_06;
+    ReceiverPreferences receiverPreferences1(f);
+    receiverPreferences1.add_receiver(&s1);
+
+
+    std::unique_ptr<IPackageQueue> pq1 = std::make_unique<PackageQueue>(PackageQueue(FIFO));
+    class Worker w1(1,1,std::move(pq1),receiverPreferences1);
+
+    ReceiverPreferences receiverPreferences2(f);
+    receiverPreferences2.add_receiver(&w1);
+    Ramp r1(1,1,receiverPreferences2);
+
+    Time i=1;
+    while (i<=2) {
+        //Dostawa
+        r1.deliver_goods(i);
+        std::cout << r1.get_sending_buffer().has_value();
+        //Prekazanie
+        r1.send_package();
+        w1.send_package();
+
+        //Przetworzenie
+        w1.do_work(i);
+        i++;
+    }
+
+    EXPECT_EQ(s1.get_queue_size(),1);
+    EXPECT_EQ(w1.get_queue_size(),0);
+    EXPECT_TRUE(w1.get_sending_buffer().has_value());
+}
+
+TEST(WorkerReceiveAndSendTest2, RampFaster){
+    Storehouse s1(1);
 
     ProbabilityGenerator f = fixed_prob_06;
     ReceiverPreferences receiverPreferences1(f);
@@ -95,13 +140,13 @@ TEST(WorkerReceiveAndSendTest, All){
 
     ReceiverPreferences receiverPreferences2(f);
     receiverPreferences2.add_receiver(&w1);
-    Ramp r1(1,2,receiverPreferences2);
+    Ramp r1(1,1,receiverPreferences2);
 
-    Time i=0;
-    while (i<1) {
+    Time i=1;
+    while (i<=10) {
         //Dostawa
         r1.deliver_goods(i);
-
+        std::cout << r1.get_sending_buffer().has_value();
         //Prekazanie
         r1.send_package();
         w1.send_package();
@@ -110,15 +155,85 @@ TEST(WorkerReceiveAndSendTest, All){
         w1.do_work(i);
         i++;
     }
-    EXPECT_TRUE(true);
+
+    EXPECT_EQ(s1.get_queue_size(),4);
+    EXPECT_EQ(w1.get_queue_size(),5);
+    EXPECT_TRUE(w1.get_sending_buffer().has_value());
+}
+
+TEST(WorkerReceiveAndSendTest2, WorekerFaster){
+    Storehouse s1(1);
+
+    ProbabilityGenerator f = fixed_prob_06;
+    ReceiverPreferences receiverPreferences1(f);
+    receiverPreferences1.add_receiver(&s1);
+
+
+    std::unique_ptr<IPackageQueue> pq1 = std::make_unique<PackageQueue>(PackageQueue(FIFO));
+    class Worker w1(1,1,std::move(pq1),receiverPreferences1);
+
+    ReceiverPreferences receiverPreferences2(f);
+    receiverPreferences2.add_receiver(&w1);
+    Ramp r1(1,2,receiverPreferences2);
+
+    Time i=1;
+    while (i<=10) {
+        //Dostawa
+        r1.deliver_goods(i);
+        std::cout << r1.get_sending_buffer().has_value();
+        //Prekazanie
+        r1.send_package();
+        w1.send_package();
+
+        //Przetworzenie
+        w1.do_work(i);
+        i++;
+    }
+
+    EXPECT_EQ(s1.get_queue_size(),5);
+    EXPECT_EQ(w1.get_queue_size(),0);
+    EXPECT_FALSE(w1.get_sending_buffer().has_value());
+}
+
+TEST(WorkerReceiveAndSendTest, WorkerSending){
+    Storehouse s1(1);
+    Storehouse s2(2);
+
+    ProbabilityGenerator f = fixed_prob_06;
+    ReceiverPreferences receiverPreferences1(f);
+    receiverPreferences1.add_receiver(&s1);
+    receiverPreferences1.add_receiver(&s2);
+
+
+    std::unique_ptr<IPackageQueue> pq1 = std::make_unique<PackageQueue>(PackageQueue(FIFO));
+    class Worker w1(1,1,std::move(pq1),receiverPreferences1);
+
+    ReceiverPreferences receiverPreferences2(f);
+    receiverPreferences2.add_receiver(&w1);
+    Ramp r1(1,1,receiverPreferences2);
+
+    Time i=1;
+    while (i<=2) {
+        //Dostawa
+        r1.deliver_goods(i);
+        std::cout << r1.get_sending_buffer().has_value();
+        //Prekazanie
+        r1.send_package();
+        w1.send_package();
+
+        //Przetworzenie
+        w1.do_work(i);
+        i++;
+    }
+
+    EXPECT_EQ(s1.get_queue_size(),0);
+    EXPECT_EQ(s2.get_queue_size(),1);
+    EXPECT_EQ(w1.get_queue_size(),0);
+    EXPECT_TRUE(w1.get_sending_buffer().has_value());
 }
 
 TEST(PackageSenderTest, BufferClear){
-    PackageStockpile p2;
-
-    std::unique_ptr<IPackageStockpile> ps2 = std::make_unique<PackageStockpile>(std::move(p2));
-
-    Storehouse s2(1,std::move(ps2));
+    Storehouse s2(1);
 
     ProbabilityGenerator f1 = fixed_prob_06;
     ReceiverPreferences receiverPreferences2(f1);

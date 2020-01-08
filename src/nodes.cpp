@@ -9,16 +9,10 @@ void PackageSender::send_package(){
 
 }
 
-std::optional<Package> PackageSender::get_sending_buffer(){
-    return std::move(buffer);
-}
-
 void PackageSender::push_package(Package&& package){
     buffer.emplace(std::move(package));
 }
 
-PackageSender::PackageSender(ReceiverPreferences& receiver_preferences) : receiver_preferences(
-        receiver_preferences) {}
 
 void ReceiverPreferences::add_receiver(IPackageReceiver* receiver) {
     if (receivers_.empty()){
@@ -40,7 +34,7 @@ void ReceiverPreferences::remove_receiver(IPackageReceiver* receiver) {
     receivers_.erase(receiver);
 }
 
-IPackageReceiver* ReceiverPreferences::choose_receiver() {
+IPackageReceiver* ReceiverPreferences::choose_receiver() const{
     auto rnd = pg_();
 
     double distr=0;
@@ -56,24 +50,24 @@ IPackageReceiver* ReceiverPreferences::choose_receiver() {
 }
 
 void Ramp::deliver_goods(Time t) {
-    if (t==0) {
+    if (t==1) {
         Package p1;
         push_package(std::move(p1));
-    } else if (t%di_==0) {
+    } else if ((t-1)%di_==0) {
         Package p3;
         push_package(std::move(p3));
     }
 }
 
 void Worker::do_work(Time t) {
-    if (now_processed.has_value()){
-        if (actual_processing_time == 0) {
+    if (now_processed.has_value()||!(q_->empty())){
+        if (actual_processing_time == 1) {
             processing_start_time = t;
-            actual_processing_time = t + pd_;
+            actual_processing_time = t + pd_ - 1;
             now_processed = q_->pop();
         }
         if (actual_processing_time == t) {
-            actual_processing_time = 0;
+            actual_processing_time = 1;
             push_package(std::move(now_processed.value()));
             now_processed.reset();
         }

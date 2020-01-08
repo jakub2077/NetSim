@@ -10,11 +10,19 @@ enum PackageQueueType {
 
 class IPackageStockpile {
 public:
+    using const_iterator = std::list<Package>::const_iterator;
+
     virtual void push(Package&& package) = 0;
 
     virtual bool empty() const = 0;
 
     virtual std::size_t size() const = 0;
+
+    virtual const_iterator cbegin() const = 0;
+
+    virtual const_iterator cend() const = 0;
+
+    virtual std::list<Package>& get_q() = 0;
 };
 
 class IPackageQueue : public IPackageStockpile {
@@ -38,6 +46,12 @@ public:
     Package pop() override;
 
     PackageQueueType  get_queue_type() const override { return queue_type_;};
+
+    const_iterator cbegin() const override { return queue_.cbegin();}
+
+    const_iterator cend() const override { return queue_.cend();}
+
+    std::list<Package>& get_q() override { return queue_;}
 private:
     std::list<Package> queue_;
 
@@ -48,7 +62,7 @@ class PackageStockpile: public IPackageStockpile {
 public:
     PackageStockpile() = default;
 
-    PackageStockpile(std::list<Package> list): list_(std::move(list)) {}
+    explicit PackageStockpile(std::list<Package> list): list_(std::move(list)) {}
 
     void push(Package&& package) override {list_.push_back(std::move(package));}
 
@@ -56,6 +70,11 @@ public:
 
     std::size_t size() const override { return list_.size();};
 
+    const_iterator cbegin() const override { return list_.cbegin();}
+
+    const_iterator cend() const override { return list_.cend();}
+
+    std::list<Package>& get_q() override { return list_;}
 private:
     std::list<Package> list_;
 };
