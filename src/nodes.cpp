@@ -2,7 +2,7 @@
 
 void PackageSender::send_package(){
     if (buffer.has_value()){
-        IPackageReceiver* receiver = receiver_preferences.choose_receiver();
+        IPackageReceiver* receiver = receiver_preferences_.choose_receiver();
         receiver->receive_package(std::move(buffer.value()));
         buffer.reset();
     }
@@ -20,16 +20,16 @@ void ReceiverPreferences::add_receiver(IPackageReceiver* receiver) {
     } else {
         double probability = 1.0/(receivers_.size()+1);
 
-        for (auto& [r,p] : receivers_){
-            p = p*(1-probability);
+        for (auto& p : receivers_){
+            p.second = p.second*(1-probability);
         }
         receivers_[receiver] = probability;
     }
 }
 
 void ReceiverPreferences::remove_receiver(IPackageReceiver* receiver) {
-    for (auto& [r,p] : receivers_) {
-        p = p / (1 - receivers_[receiver]);
+    for (auto& p : receivers_) {
+        p.second = p.second / (1 - receivers_[receiver]);
     }
     receivers_.erase(receiver);
 }
@@ -45,9 +45,12 @@ IPackageReceiver* ReceiverPreferences::choose_receiver() const{
         distr += it->second;
     }
 
-    auto [r,p] = *receivers_.begin();
-    return r;
+    auto r = *receivers_.begin();
+    return r.first;
 }
+
+ReceiverPreferences::ReceiverPreferences(ProbabilityGenerator pg) : pg_(std::move(pg)){}
+
 
 void Ramp::deliver_goods(Time t) {
     if (t==1) {

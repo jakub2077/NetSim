@@ -32,6 +32,21 @@ target_include_directories(NetSim__test PUBLIC
         ../googletest-master/googletest/include
         )
 
+target_link_libraries(NetSim__test gmock)
+
+
+set(SOURCES_FILES_TESTS_KLECZEK
+        test_kleczek/test_nodes.cpp)
+
+add_executable(NetSim__test_kleczek ${SOURCE_FILES} ${SOURCES_FILES_TESTS_KLECZEK} test_kleczek/main_gtest.cpp)
+
+target_compile_definitions(NetSim__test_kleczek PUBLIC EXERCISE_ID=EXERCISE_ID_NODES)
+
+target_include_directories(NetSim__test_kleczek PUBLIC
+        ../googletest-master/googlemock/include
+        ../googletest-master/googletest/include
+        )
+
 add_subdirectory(../googletest-master googletest-master)
 
-target_link_libraries(NetSim__test gmock)
+target_link_libraries(NetSim__test_kleczek gmock)

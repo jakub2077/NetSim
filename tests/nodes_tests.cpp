@@ -17,19 +17,15 @@ TEST(ReceiverPreferencesTest, Insertion){
     receiverPreferences.add_receiver(&s2);
     receiverPreferences.add_receiver(&s3);
 
-    auto [r1,p1] = *receiverPreferences.begin();
-    auto [r2,p2] = *receiverPreferences.begin();
-    auto [r3,p3] = *receiverPreferences.begin();
+    auto p1 = *receiverPreferences.begin();
 
-    EXPECT_DOUBLE_EQ(p1,1.0/3.0);
-    EXPECT_DOUBLE_EQ(p2,1.0/3.0);
-    EXPECT_DOUBLE_EQ(p3,1.0/3.0);
+    EXPECT_DOUBLE_EQ(p1.second,1.0/3.0);
 
     receiverPreferences.remove_receiver(&s3);
 
-    auto [r32,p32] = *receiverPreferences.begin();
+    auto p2 = *receiverPreferences.begin();
 
-    EXPECT_EQ(p32,0.5);
+    EXPECT_EQ(p2.second,0.5);
 }
 
 TEST(ReceiverPreferencesTest, Randomizer){
@@ -78,8 +74,8 @@ TEST(RampAndStorehouseTest, Alll){
 
     Ramp r1(1,2);
 
-    r1.receiver_preferences.add_receiver(&s1);
-    r1.receiver_preferences.add_receiver(&s2);
+    r1.receiver_preferences_.add_receiver(&s1);
+    r1.receiver_preferences_.add_receiver(&s2);
 
 
     Time i=1;
@@ -102,7 +98,7 @@ TEST(WorkerReceiveAndSendTest, RampAndWorkerNormal){
 
 
     std::unique_ptr<IPackageQueue> pq1 = std::make_unique<PackageQueue>(PackageQueue(FIFO));
-    class Worker w1(1,1,std::move(pq1),receiverPreferences1);
+    Worker w1(1,1,std::move(pq1),receiverPreferences1);
 
     ReceiverPreferences receiverPreferences2(f);
     receiverPreferences2.add_receiver(&w1);
@@ -136,7 +132,7 @@ TEST(WorkerReceiveAndSendTest2, RampFaster){
 
 
     std::unique_ptr<IPackageQueue> pq1 = std::make_unique<PackageQueue>(PackageQueue(FIFO));
-    class Worker w1(1,2,std::move(pq1),receiverPreferences1);
+    Worker w1(1,2,std::move(pq1),receiverPreferences1);
 
     ReceiverPreferences receiverPreferences2(f);
     receiverPreferences2.add_receiver(&w1);
@@ -170,7 +166,7 @@ TEST(WorkerReceiveAndSendTest2, WorekerFaster){
 
 
     std::unique_ptr<IPackageQueue> pq1 = std::make_unique<PackageQueue>(PackageQueue(FIFO));
-    class Worker w1(1,1,std::move(pq1),receiverPreferences1);
+    Worker w1(1,1,std::move(pq1),receiverPreferences1);
 
     ReceiverPreferences receiverPreferences2(f);
     receiverPreferences2.add_receiver(&w1);
@@ -206,7 +202,7 @@ TEST(WorkerReceiveAndSendTest, WorkerSending){
 
 
     std::unique_ptr<IPackageQueue> pq1 = std::make_unique<PackageQueue>(PackageQueue(FIFO));
-    class Worker w1(1,1,std::move(pq1),receiverPreferences1);
+    Worker w1(1,1,std::move(pq1),receiverPreferences1);
 
     ReceiverPreferences receiverPreferences2(f);
     receiverPreferences2.add_receiver(&w1);
@@ -241,7 +237,7 @@ TEST(PackageSenderTest, BufferClear){
 
 
     std::unique_ptr<IPackageQueue> pq2 = std::make_unique<PackageQueue>(PackageQueue(FIFO));
-    class Worker w1(1,2,std::move(pq2),receiverPreferences2);
+    Worker w1(1,2,std::move(pq2),receiverPreferences2);
 
     ReceiverPreferences receiverPreferences3(f1);
     receiverPreferences3.add_receiver(&w1);

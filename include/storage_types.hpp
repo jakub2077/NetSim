@@ -18,6 +18,10 @@ public:
 
     virtual std::size_t size() const = 0;
 
+    virtual const_iterator begin() const = 0;
+
+    virtual const_iterator end() const = 0;
+
     virtual const_iterator cbegin() const = 0;
 
     virtual const_iterator cend() const = 0;
@@ -35,17 +39,21 @@ public:
 //in progress
 class PackageQueue: public IPackageQueue {
 public:
-    explicit PackageQueue(PackageQueueType queue_type): queue_type_(queue_type) {};
+    explicit PackageQueue(PackageQueueType queue_type): queue_type_(queue_type) {}
 
     void push(Package&& product) override;
 
-    bool empty() const override { return queue_.empty();};
+    bool empty() const override { return queue_.empty();}
 
-    std::size_t size() const override { return queue_.size();};
+    std::size_t size() const override { return queue_.size();}
 
     Package pop() override;
 
-    PackageQueueType  get_queue_type() const override { return queue_type_;};
+    PackageQueueType  get_queue_type() const override { return queue_type_;}
+
+    const_iterator begin() const override { return queue_.cbegin();}
+
+    const_iterator end() const override { return queue_.cend();}
 
     const_iterator cbegin() const override { return queue_.cbegin();}
 
@@ -69,6 +77,10 @@ public:
     bool empty() const override { return list_.empty();};
 
     std::size_t size() const override { return list_.size();};
+
+    const_iterator begin() const override { return list_.cbegin();}
+
+    const_iterator end() const override { return list_.cend();}
 
     const_iterator cbegin() const override { return list_.cbegin();}
 

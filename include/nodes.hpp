@@ -6,23 +6,29 @@
 #include "helpers.hpp"
 #include "storage_types.hpp"
 
-enum ReceiverType{
-    Worker,
-    Storage
-};
 
 class IPackageReceiver{
 public:
+    using const_iterator = IPackageStockpile::const_iterator;
+
     virtual void receive_package(Package&& p) = 0;
 
-    virtual ReceiverType get_receiver_type() const = 0;
+    //virtual ReceiverType get_receiver_type() const = 0;
 
     virtual ElementID get_id() const = 0;
+
+    virtual const_iterator begin() const = 0;
+
+    virtual const_iterator end() const = 0;
+
+    virtual const_iterator cbegin() const = 0;
+
+    virtual const_iterator cend() const = 0;
 };
 
 class ReceiverPreferences{
 public:
-    explicit ReceiverPreferences(ProbabilityGenerator pg = probability_generator): pg_(std::move(pg)) {};
+    explicit ReceiverPreferences(ProbabilityGenerator pg = probability_generator);
 
     using preferences_t = std::map<IPackageReceiver*, double>;
 
@@ -38,13 +44,13 @@ public:
 
     preferences_t get_preferences() const { return receivers_;}
 
+    const_iterator begin() const { return receivers_.cbegin();}
+
+    const_iterator end() const { return receivers_.cend();}
+
     const_iterator cbegin() const { return receivers_.cbegin();}
 
     const_iterator cend() const { return receivers_.cend();}
-
-    iterator begin() { return receivers_.begin();}
-
-    iterator end() { return receivers_.end();}
 
 private:
     preferences_t receivers_;
@@ -57,13 +63,13 @@ class PackageSender{
 public:
     PackageSender() = default;
 
-    explicit PackageSender(ReceiverPreferences& receiver_preferences) : receiver_preferences(receiver_preferences) {}
+    explicit PackageSender(ReceiverPreferences& receiver_preferences) : receiver_preferences_(receiver_preferences) {}
 
     void send_package();
 
     std::optional<Package>& get_sending_buffer() {return buffer;};
 
-    ReceiverPreferences receiver_preferences;
+    ReceiverPreferences receiver_preferences_;
 
 protected:
     void push_package(Package&& package);
@@ -79,13 +85,21 @@ public:
 
     void receive_package(Package&& p) override {d_->push(std::move(p));}
 
-    ReceiverType get_receiver_type() const override {return ReceiverType::Storage;}
+    //ReceiverType get_receiver_type() const override {return ReceiverType::Storage;}
 
     ElementID get_id() const override {return id_;}
 
     std::size_t get_queue_size() const{ return d_->size();}
 
     std::list<Package>& get_queue() { return d_->get_q();}
+
+    const_iterator begin() const override { return d_->cbegin();}
+
+    const_iterator end() const override { return d_->cend();}
+
+    const_iterator cbegin() const override { return d_->cbegin();}
+
+    const_iterator cend() const override { return d_->cend();}
 private:
     ElementID id_;
 
@@ -125,7 +139,7 @@ public:
 
     void receive_package(Package&& p) override {q_->push(std::move(p));}
 
-    ReceiverType get_receiver_type() const override {return ReceiverType::Storage;}
+    //ReceiverType get_receiver_type() const override {return ReceiverType::Storage;}
 
     ElementID get_id() const override {return id_;}
 
@@ -134,6 +148,14 @@ public:
     std::optional<Package>& get_now_processed() {return now_processed;}
 
     std::list<Package>& get_queue() { return q_->get_q();}
+
+    const_iterator begin() const override { return q_->cbegin();}
+
+    const_iterator end() const override { return q_->cend();}
+
+    const_iterator cbegin() const override { return q_->cbegin();}
+
+    const_iterator cend() const override { return q_->cend();}
 private:
     ElementID id_;
 
@@ -148,7 +170,11 @@ private:
     std::optional<Package> now_processed;//Aktualnie przetwarzany produkt
 };
 
-
-
+/*
+enum ReceiverType{
+    Worker,
+    Storage
+};
+ */
 
 #endif //NETSIM_NODES_HPP

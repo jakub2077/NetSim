@@ -1,5 +1,7 @@
 #include "helpers.hpp"
 
+#include <cstdlib>
+
 double random_prob(){
     return ((double)rand() / (RAND_MAX));
 }
