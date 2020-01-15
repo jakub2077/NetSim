@@ -28,10 +28,12 @@ void ReceiverPreferences::add_receiver(IPackageReceiver* receiver) {
 }
 
 void ReceiverPreferences::remove_receiver(IPackageReceiver* receiver) {
-    for (auto& p : receivers_) {
-        p.second = p.second / (1 - receivers_[receiver]);
-    }
+    double tmp=receivers_[receiver];
     receivers_.erase(receiver);
+    for (auto& p : receivers_) {
+        p.second = p.second / (1 - tmp);
+    }
+
 }
 
 IPackageReceiver* ReceiverPreferences::choose_receiver() const{

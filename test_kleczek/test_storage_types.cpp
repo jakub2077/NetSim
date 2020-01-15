@@ -10,8 +10,8 @@ using ::std::endl;
 
 TEST(PackageQueueTest, IsFifoCorrect) {
     PackageQueue q(PackageQueueType::FIFO);
-    q.push(Package(1));
-    q.push(Package(2));
+    q.push(Package());
+    q.push(Package());
 
     Package p(std::move(q.pop()));
     EXPECT_EQ(p.get_id(), 1);
@@ -22,8 +22,8 @@ TEST(PackageQueueTest, IsFifoCorrect) {
 
 TEST(PackageQueueTest, IsLifoCorrect) {
     PackageQueue q(PackageQueueType::LIFO);
-    q.push(Package(1));
-    q.push(Package(2));
+    q.push(Package());
+    q.push(Package());
 
     Package p(std::move(q.pop()));
     EXPECT_EQ(p.get_id(), 2);

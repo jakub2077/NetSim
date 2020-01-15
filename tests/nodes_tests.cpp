@@ -248,3 +248,22 @@ TEST(PackageSenderTest, BufferClear){
     EXPECT_EQ(r1.get_sending_buffer(),std::nullopt);
 }
 
+TEST(ReceiverPreferencesTest1, RemoveReceiversRescalesProbability1) {
+    // Upewnij się, że usunięcie odbiorcy spowoduje przeskalowanie pozostałych prawdopodobieństw.
+    ReceiverPreferences rp;
+
+    Storehouse r1(1);
+    Storehouse r2(2);
+
+    //MockReceiver r1, r2;
+    rp.add_receiver(&r1);
+    rp.add_receiver(&r2);
+
+    rp.remove_receiver(&r2);
+
+    ASSERT_EQ(rp.get_preferences().find(&r2), rp.get_preferences().end());
+
+    EXPECT_EQ(rp.get_preferences().at(&r1), 1.0);
+}
+
+
