@@ -6,6 +6,10 @@
 #include "helpers.hpp"
 #include "storage_types.hpp"
 
+enum ReceiverType{
+    WORKER,
+    STOREHOUSE,
+};
 
 class IPackageReceiver{
 public:
@@ -13,7 +17,7 @@ public:
 
     virtual void receive_package(Package&& p) = 0;
 
-    //virtual ReceiverType get_receiver_type() const = 0;
+    virtual ReceiverType get_receiver_type() const = 0;
 
     virtual ElementID get_id() const = 0;
 
@@ -42,7 +46,7 @@ public:
 
     IPackageReceiver* choose_receiver() const;
 
-    preferences_t& get_preferences() { return receivers_;}
+    const preferences_t& get_preferences() const { return receivers_;}
 
     const_iterator begin() const { return receivers_.cbegin();}
 
@@ -85,7 +89,7 @@ public:
 
     void receive_package(Package&& p) override {d_->push(std::move(p));}
 
-    //ReceiverType get_receiver_type() const override {return ReceiverType::Storage;}
+    ReceiverType get_receiver_type() const override {return ReceiverType::STOREHOUSE;}
 
     ElementID get_id() const override {return id_;}
 
@@ -139,7 +143,7 @@ public:
 
     void receive_package(Package&& p) override {q_->push(std::move(p));}
 
-    //ReceiverType get_receiver_type() const override {return ReceiverType::Storage;}
+    ReceiverType get_receiver_type() const override {return ReceiverType::WORKER;}
 
     ElementID get_id() const override {return id_;}
 
@@ -169,12 +173,5 @@ private:
 
     std::optional<Package> now_processed;//Aktualnie przetwarzany produkt
 };
-
-/*
-enum ReceiverType{
-    Worker,
-    Storage
-};
- */
 
 #endif //NETSIM_NODES_HPP

@@ -7,10 +7,11 @@ bool has_reachable_storehouse(const PackageSender* sender, std::map<const Packag
     node_colors[sender] = NodeColor::VISITED;
 
     if (sender->receiver_preferences_.get_preferences().empty()){
-        throw "";
+        throw std::logic_error("No receivers");
     }
 
     bool has_receivers = false;
+    //bool storehouse_reached = false;
     for (auto r: sender->receiver_preferences_.get_preferences()) {
         if (r.first->get_receiver_type() == ReceiverType::STOREHOUSE) {
             has_receivers = true;
@@ -22,14 +23,15 @@ bool has_reachable_storehouse(const PackageSender* sender, std::map<const Packag
             if (sendrecv_ptr == sender){
 
             }
-            has_receivers = false;
+            has_receivers = true;
 
             if (node_colors[sendrecv_ptr] != NodeColor::VISITED) {
                 has_receivers = has_reachable_storehouse(sendrecv_ptr, node_colors);
             }
-
         }
-
     }
 
+    node_colors[sender] = NodeColor::VERIFIED;
+
+    return has_receivers;
 }
