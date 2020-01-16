@@ -62,7 +62,6 @@ private:
     ProbabilityGenerator pg_;
 };
 
-//not implemented
 class PackageSender{
 public:
     PackageSender() = default;
@@ -81,7 +80,6 @@ protected:
 private:
     std::optional<Package> buffer;
 };
-
 
 class Storehouse: public IPackageReceiver{
 public:
@@ -128,7 +126,6 @@ private:
 };
 
 
-
 class Worker: public PackageSender, public IPackageReceiver{
 public:
     Worker(ElementID id, TimeOffset pd, std::unique_ptr<IPackageQueue> q) : id_(id), pd_(pd), q_(q.release()){}
@@ -173,5 +170,52 @@ private:
 
     std::optional<Package> now_processed;//Aktualnie przetwarzany produkt
 };
+
+template <class Node> class NodeCollection{
+public:
+    using container_t = typename std::list<Node>;
+
+    using iterator = typename container_t::iterator;
+
+    using const_iterator = typename container_t::const_iterator;
+
+    NodeCollection(container_t collection) : collection_(collection) {}
+
+    void add(Node& node);
+
+    void remove_by_id(ElementID id_);
+
+    typename NodeCollection<Node>::iterator find_by_id(ElementID id_);
+
+    typename NodeCollection<Node>::const_iterator find_by_id(ElementID id_);
+
+private:
+    container_t collection_;
+};
+
+template <class Node>
+void NodeCollection<Node>::add(Node& node){
+    collection_.push_back(std::move(node));
+}
+
+//not implemented
+template <class Node>
+void NodeCollection<Node>::remove_by_id(ElementID id_){
+}
+
+template <class Node>
+typename NodeCollection<Node>::iterator NodeCollection<Node>::find_by_id(ElementID id_){
+    auto it = std::find_if(collection_.begin(),collection_.end(),
+                                 [id_](const auto& elem){ return (elem.get_id() == id_);});
+    return it;
+}
+
+template <class Node>
+typename NodeCollection<Node>::const_iterator NodeCollection<Node>::find_by_id(ElementID id_){
+    const auto it = std::find_if(collection_.begin(),collection_.end(),
+            [id_](const auto& elem){ return (elem.get_id() == id_);});
+    return it;
+}
+
 
 #endif //NETSIM_NODES_HPP
