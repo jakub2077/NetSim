@@ -40,7 +40,7 @@ IPackageReceiver* ReceiverPreferences::choose_receiver() const{
     auto rnd = pg_();
 
     double distr=0;
-    for(auto it=receivers_.rbegin();it!=receivers_.rend();++it){
+    for(auto it=receivers_.begin();it!=receivers_.end();++it){
         if(rnd<(distr+it->second)){
             return it->first;
         }
