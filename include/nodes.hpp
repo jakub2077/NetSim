@@ -125,7 +125,6 @@ private:
     TimeOffset di_;
 };
 
-
 class Worker: public PackageSender, public IPackageReceiver{
 public:
     Worker(ElementID id, TimeOffset pd, std::unique_ptr<IPackageQueue> q) : id_(id), pd_(pd), q_(q.release()){}
@@ -214,7 +213,7 @@ typename NodeCollection<Node>::iterator NodeCollection<Node>::find_by_id(Element
 
 template <class Node>
 typename NodeCollection<Node>::const_iterator NodeCollection<Node>::find_by_id(ElementID id_) const{
-    return std::find_if(collection_.begin(),collection_.end(),
+    return std::find_if(collection_.cbegin(),collection_.cend(),
             [id_](const auto& elem){ return (elem.get_id() == id_);});
 }
 
