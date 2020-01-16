@@ -41,4 +41,3 @@ TEST(HasStorehouse, All){
 
     EXPECT_TRUE(has_reachable_storehouse(&r1,node_colors));
 }
-

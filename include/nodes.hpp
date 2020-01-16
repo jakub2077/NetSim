@@ -188,6 +188,14 @@ public:
 
     typename NodeCollection<Node>::const_iterator find_by_id(ElementID id_) const;
 
+    typename NodeCollection<Node>::iterator begin() { return collection_.begin();}
+
+    typename NodeCollection<Node>::iterator end() { return collection_.end();}
+
+    typename NodeCollection<Node>::const_iterator cbegin() const { return collection_.cbegin();}
+
+    typename NodeCollection<Node>::const_iterator cend() const { return collection_.cend();}
+
 private:
     container_t collection_;
 };
@@ -213,7 +221,7 @@ typename NodeCollection<Node>::iterator NodeCollection<Node>::find_by_id(Element
 
 template <class Node>
 typename NodeCollection<Node>::const_iterator NodeCollection<Node>::find_by_id(ElementID id_) const{
-    return std::find_if(collection_.cbegin(),collection_.cend(),
+    return std::find_if(collection_.begin(),collection_.end(),
             [id_](const auto& elem){ return (elem.get_id() == id_);});
 }
 
