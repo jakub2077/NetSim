@@ -187,7 +187,7 @@ public:
 
     typename NodeCollection<Node>::iterator find_by_id(ElementID id_);
 
-    typename NodeCollection<Node>::const_iterator find_by_id(ElementID id_);
+    typename NodeCollection<Node>::const_iterator find_by_id(ElementID id_) const;
 
 private:
     container_t collection_;
@@ -198,24 +198,24 @@ void NodeCollection<Node>::add(Node& node){
     collection_.push_back(std::move(node));
 }
 
-//not implemented
 template <class Node>
 void NodeCollection<Node>::remove_by_id(ElementID id_){
+    auto position = find_by_id(id_);
+    if (position!=collection_.end()){
+        collection_.erase(position);
+    }
 }
 
 template <class Node>
 typename NodeCollection<Node>::iterator NodeCollection<Node>::find_by_id(ElementID id_){
-    auto it = std::find_if(collection_.begin(),collection_.end(),
+    return std::find_if(collection_.begin(),collection_.end(),
                                  [id_](const auto& elem){ return (elem.get_id() == id_);});
-    return it;
 }
 
 template <class Node>
-typename NodeCollection<Node>::const_iterator NodeCollection<Node>::find_by_id(ElementID id_){
-    const auto it = std::find_if(collection_.begin(),collection_.end(),
+typename NodeCollection<Node>::const_iterator NodeCollection<Node>::find_by_id(ElementID id_) const{
+    return std::find_if(collection_.begin(),collection_.end(),
             [id_](const auto& elem){ return (elem.get_id() == id_);});
-    return it;
 }
-
 
 #endif //NETSIM_NODES_HPP
