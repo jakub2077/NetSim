@@ -2,42 +2,29 @@
 
 #include "factory.hpp"
 
-TEST(HasStorehouse, All){
-    Storehouse s1(1);
+TEST(FactoryTest1, UberTest) {
+    // R -> W1 -> W2 -> S1
+    //      W1 -> W3 -> W3
 
-    ProbabilityGenerator f = fixed_prob_06;
-    ReceiverPreferences receiverPreferences1(f);
-    receiverPreferences1.add_receiver(&s1);
+    Factory factory;
+    factory.add_ramp(Ramp(1, 1));
+    factory.add_worker(Worker(1, 1, std::make_unique<PackageQueue>(PackageQueueType::FIFO)));
+    factory.add_worker(Worker(2, 1, std::make_unique<PackageQueue>(PackageQueueType::FIFO)));
+    factory.add_worker(Worker(3, 1, std::make_unique<PackageQueue>(PackageQueueType::FIFO)));
+    factory.add_storehouse(Storehouse(1));
 
-    std::unique_ptr<IPackageQueue> pq1 = std::make_unique<PackageQueue>(PackageQueue(FIFO));
-    Worker w1(1,1,std::move(pq1),receiverPreferences1);
+    Ramp& r = *(factory.find_ramp_by_id(1));
+    r.receiver_preferences_.add_receiver(&(*factory.find_worker_by_id(1)));
 
-    ReceiverPreferences receiverPreferences2(f);
-    receiverPreferences2.add_receiver(&w1);
-    Ramp r1(1,2,receiverPreferences2);
+    Worker& w1 = *(factory.find_worker_by_id(1));
+    w1.receiver_preferences_.add_receiver(&(*factory.find_worker_by_id(2)));
+    w1.receiver_preferences_.add_receiver(&(*factory.find_worker_by_id(3)));
 
-    Time i=1;
-    while (i<=10) {
-        //Dostawa
-        r1.deliver_goods(i);
-        std::cout << r1.get_sending_buffer().has_value();
-        //Prekazanie
-        r1.send_package();
-        w1.send_package();
+    Worker& w2 = *(factory.find_worker_by_id(2));
+    w2.receiver_preferences_.add_receiver(&(*factory.find_storehouse_by_id(1)));
 
-        //Przetworzenie
-        w1.do_work(i);
-        i++;
-    }
+    Worker& w3 = *(factory.find_worker_by_id(3));
+    w3.receiver_preferences_.add_receiver(&(*factory.find_worker_by_id(3)));
 
-    EXPECT_EQ(s1.get_queue_size(),5);
-    EXPECT_EQ(w1.get_queue_size(),0);
-    EXPECT_FALSE(w1.get_sending_buffer().has_value());
-
-    std::map<const PackageSender*, NodeColor> node_colors;
-
-    node_colors[&r1] = NodeColor::UNVISITED;
-    node_colors[&w1] = NodeColor::UNVISITED;
-
-    EXPECT_TRUE(has_reachable_storehouse(&r1,node_colors));
+    EXPECT_FALSE(factory.is_consistent());
 }

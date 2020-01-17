@@ -1,6 +1,8 @@
 #ifndef NETSIM_NODES_HPP
 #define NETSIM_NODES_HPP
 
+#include <utility>
+
 #include "types.hpp"
 #include "package.hpp"
 #include "helpers.hpp"
@@ -43,6 +45,8 @@ public:
     void add_receiver(IPackageReceiver* receiver);
 
     void remove_receiver(IPackageReceiver* receiver);
+
+    void set_preferences(preferences_t r) {receivers_ = std::move(r);}
 
     IPackageReceiver* choose_receiver() const;
 
@@ -172,6 +176,8 @@ private:
 
 template <class Node> class NodeCollection{
 public:
+    NodeCollection() {}
+
     using container_t = typename std::list<Node>;
 
     using iterator = typename container_t::iterator;

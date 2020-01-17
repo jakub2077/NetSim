@@ -38,8 +38,8 @@ target_link_libraries(NetSim__test gmock)
 
 
 set(SOURCES_FILES_TESTS_KLECZEK
-        test_kleczek/test_nodes.cpp
-        test_kleczek/test_package.cpp)
+        test_kleczek/test_package.cpp
+        test_kleczek/test_Factory.cpp)
 
 add_executable(NetSim__test_kleczek ${SOURCE_FILES} ${SOURCES_FILES_TESTS_KLECZEK} test_kleczek/main_gtest.cpp)
 
