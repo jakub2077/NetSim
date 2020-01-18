@@ -38,7 +38,7 @@ public:
     NodeCollection<Storehouse>::const_iterator storehouse_cend() const {return storehouses_.cend();}
 
     bool is_consistent();
-    void do_deliveries(Time);
+    void do_deliveries(Time t);
     void do_package_passing();
     void do_work();
 
