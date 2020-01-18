@@ -74,8 +74,8 @@ void Factory::do_package_passing(){
     }
 }
 
-void Factory::do_work(){
+void Factory::do_work(Time t){
     for(auto& worker : workers_){
-        worker.do_work(1);
+        worker.do_work(t);
     }
 }

@@ -40,7 +40,7 @@ public:
     bool is_consistent();
     void do_deliveries(Time t);
     void do_package_passing();
-    void do_work();
+    void do_work(Time t);
 
 private:
     NodeCollection<Ramp> ramps_;
