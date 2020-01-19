@@ -79,3 +79,27 @@ void Factory::do_work(Time t){
         worker.do_work(t);
     }
 }
+
+void Factory::remove_ramp(ElementID id) {
+    ramps_.remove_by_id(id);
+}
+
+void Factory::remove_worker(ElementID id) {
+    for(auto& ramp: ramps_){
+        ramp.receiver_preferences_.remove_receiver(&(*(workers_.find_by_id(id))));
+    }
+    for(auto& worker: workers_){
+        worker.receiver_preferences_.remove_receiver(&(*(workers_.find_by_id(id))));
+    }
+    workers_.remove_by_id(id);
+}
+
+void Factory::remove_storehouse(ElementID id) {
+    for(auto& ramp: ramps_){
+        ramp.receiver_preferences_.remove_receiver(&(*(storehouses_.find_by_id(id))));
+    }
+    for(auto& worker: workers_){
+        worker.receiver_preferences_.remove_receiver(&(*(storehouses_.find_by_id(id))));
+    }
+    storehouses_.remove_by_id(id);
+}

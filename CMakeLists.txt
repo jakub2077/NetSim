@@ -14,7 +14,8 @@ set(SOURCE_FILES
         src/package.cpp
         src/nodes.cpp
         src/helpers.cpp
-        src/factory.cpp)
+        src/factory.cpp
+        src/simulation.cpp)
 
 
 add_executable(NetSim main.cpp ${SOURCE_FILES})
@@ -25,7 +26,8 @@ set(SOURCES_FILES_TESTS
         tests/package_tests.cpp
         tests/storage_tests.cpp
         tests/nodes_tests.cpp
-        tests/factory_tests.cpp)
+        tests/factory_tests.cpp
+        tests/simulation_tests.cpp include/reports.hpp src/reports.cpp)
 
 add_executable(NetSim__test ${SOURCE_FILES} ${SOURCES_FILES_TESTS} tests/main_gtest.cpp)
 
@@ -39,7 +41,8 @@ target_link_libraries(NetSim__test gmock)
 
 set(SOURCES_FILES_TESTS_KLECZEK
         test_kleczek/test_package.cpp
-        test_kleczek/test_Factory.cpp)
+        test_kleczek/test_Factory.cpp
+        test_kleczek/test_simulate.cpp)
 
 add_executable(NetSim__test_kleczek ${SOURCE_FILES} ${SOURCES_FILES_TESTS_KLECZEK} test_kleczek/main_gtest.cpp)
 

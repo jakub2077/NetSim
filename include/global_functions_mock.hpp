@@ -28,13 +28,13 @@ public:
 class GlobalFunctionsFixture : public ::testing::Test {
 public:
     GlobalFunctionsFixture() {
-        #if !(defined EXERCISE_ID && EXERCISE_ID == EXERCISE_ID_FACTORY)
+        #if !(defined EXERCISE_ID && EXERCISE_ID == EXERCISE_ID_NODES)
         probability_generator = [&]() { return global_functions_mock.generate_canonical(); };
         #endif
     }
 
     ~GlobalFunctionsFixture() override {
-        #if (defined EXERCISE_ID && EXERCISE_ID == EXERCISE_ID_FACTORY)
+        #if (defined EXERCISE_ID && EXERCISE_ID == EXERCISE_ID_NODES)
 //        probability_generator = []() { return 0; };
         #else
         probability_generator = default_probability_generator;
