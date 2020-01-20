@@ -27,6 +27,9 @@ bool has_reachable_storehouse(const PackageSender* sender, std::map<const Packag
 
                 if (node_colors[sendrecv_ptr] != NodeColor::VISITED) {
                     has_receivers = has_reachable_storehouse(sendrecv_ptr, node_colors);
+                    if (!(has_receivers)) {
+                        break;
+                    }
                 }
             }
         }
